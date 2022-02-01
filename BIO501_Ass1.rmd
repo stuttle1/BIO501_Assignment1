@@ -1,0 +1,8 @@
+---
+title: "BIO501 Assignment1"
+author: "Sasha Tuttle"
+date: "1/31/2022"
+output: html_document
+---
+
+For assignment 1, I chose a figure from Kremen, Williams and Thorp (2002), "Crop pollination from native bees at risk from agricultural intensification". This study documented the contributions of individual pollinator species and of aggregate communities on farms that varied by their proximity to natural habitat and their management type. 
