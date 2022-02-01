@@ -9,9 +9,5 @@ For assignment 1, I chose a figure from Kremen, Williams and Thorp (2002) "Crop 
 
 This study was set in the Central Valley and the eastern edge of the Coast Range of Yolo County, California and focused on watermelon. Watermelon was chosen because it requires multiple bee visits to produce marketable fruit. The farms were categorized as conventional farms or organic and either near or far from natural habitat. At each site, researchers measured pollen deposition by presenting newly opened flowers to individual bees within the fields. Once the flower was visited, it was closed off using bridal veil and stigmas were excised the next day. 
 
-<<<<<<< HEAD
-The first figure in this study illustrates the total estimated pollen deposited by native bees.  
-
-=======
 The first figure in this study illustrates the total estimated pollen deposited by native bees. 
->>>>>>> 2ecd2ab03c221d4d2323ededfb94cbeda8153ee8
+
