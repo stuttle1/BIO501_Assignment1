@@ -13,7 +13,7 @@ The first figure in this study illustrates the total estimated pollen deposited 
 
 
 
-
+#Caption in square brackets - change later 
 ![Myimage](Claire_figure1.PNG)
 
 
