@@ -5,12 +5,24 @@ date: "1/31/2022"
 output: html_document
 ---
 
-For assignment 1, I chose a figure from Kremen, Williams and Thorp (2002) "Crop pollination from native bees at risk from agricultural intensification". This study documented the contributions of individual pollinator species and aggregate communities to crop pollination on farms that varied by their proximity to natural habitat and their management type. Kremen *et al.* (2002) stress that agricultural intensification has pushed farmers to rely on managed honey bees (*Apis mellifera*); however, relying entirely on managed honeybees is becoming increasingly unpractical as *A. mellifera* numbers decline from a combination of disease and insecticide poisoning. Kremen *et al.* (2002) propose that agricultural practices that support diverse wild pollinator communities could encourage wild pollinators to pollinate crops instead.  
+For assignment 1, I chose a figure from Kremen, Williams and Thorp (2002) "Crop pollination from native bees at risk from agricultural intensification". This study documented the contributions of individual pollinator species and aggregate communities to crop pollination on farms that varied by their proximity to natural habitat and their management type. Kremen *et al.* (2002) stress that agricultural intensification has pushed farmers to rely on managed honey bees (*Apis mellifera*) for crop pollination; however, relying entirely on managed honeybees may not be sustainable as *A. mellifera* numbers continue to decline from a combination of disease and insecticide poisoning. Kremen *et al.* (2002) propose that agricultural practices that support diverse wild pollinator communities could encourage wild pollinators to pollinate crops instead.  
 
-This study was set in the Central Valley and the eastern edge of the Coast Range of Yolo County, California and focused on watermelon. Watermelon was chosen because it requires multiple bee visits to produce marketable fruit. The farms were categorized as conventional farms or organic and either near or far from natural habitat. At each site, researchers measured pollen deposition by presenting newly opened flowers to individual bees within the fields. Once the flower was visited, it was closed off using bridal veil and stigmas were excised the next day. 
+This study was set in the Central Valley and the eastern edge of the Coast Range of Yolo County, California and focused on watermelon. Watermelon was chosen because it requires multiple bee visits to produce marketable fruit. The farms were categorized as either conventional or organic and either near or far from natural habitat. At each site, researchers measured pollen deposition by presenting newly opened flowers to individual bees within the fields. Once the flower was visited, it was closed off using bridal veil and stigmas were excised the next day. Abundance and diversity were recorded through full-day flower visitor surveys. 
 
-The first figure in this study illustrates the total estimated pollen deposited by native bees.  
+The first figure in this study illustrates the total estimated pollen deposited by native bees as well as the native bee diversity and abundance on the study sites. "ON" refers to organic farms near natural habitat, "OF" refers to organic farms far from natural habitat and "CF" refers to conventional farms far from natural habitat. 
 
-#Caption in square brackets - change later 
-![Myimage](Claire_figure1.PNG)
+![](Claire_figure1.PNG)
+
+I chose this figure for this assignment because it illustrates the core findings of the paper, clearly showing that organic farms near natural habitat have the greatest native pollinator diversity and abundance, as well as the greatest number of pollen grains deposited by native bees. The conventional farms far from natural habitat, on the other hand, have the least diverse native pollinator community and the smallest contribution from wild pollinators.
+
+The issue I take with these figures is that neither of them show the data itself. In part a, we simply see the sum of pollen grains deposited across all native pollinator species and the standard deviation. However, the graph gives us no hint as to how many data points were used to come up with this value. In part b of the figure, it is no different. To make matters worse, the axis labels have no units listed. For example, in part b one of the y axis is labeled "diversity" when it should be labeled "species richness" so as to refer to the number of species. Diversity is ambiguous and doesn't tell me what measure the researcher is using (e.g., shannons, species richness, Simpsons). In part a, they should have also had "pollen grains" listed as the unit. 
+
+I would have liked to create a stacked bar chart that shows the pollen deposition per flower-day by species however this information was not included in the data I managed to obtain from the author. My second solution was to create a box plot overlaid by a strip chart. 
+
+```{r}
+#reading in the data 
+watermelon <- read.csv("watermelon.csv")
+
+
+```
 
