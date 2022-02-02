@@ -20,7 +20,7 @@ The issue I take with these figures is that neither of them show the data itself
 I would have liked to create a stacked bar chart that shows the pollen deposition per flower-day by species however this information was not included in the data I managed to obtain from the author. My second solution was to create a box plot overlaid by a strip chart. 
 
 ```{r}
-#reading in the data 
+# reading in the data 
 watermelon <- read.csv("watermelon.csv")
 
 
