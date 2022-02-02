@@ -11,3 +11,5 @@ This study was set in the Central Valley and the eastern edge of the Coast Range
 
 The first figure in this study illustrates the total estimated pollen deposited by native bees.  
 
+#Caption in square brackets - change later 
+![Myimage](Claire_figure1.PNG)
