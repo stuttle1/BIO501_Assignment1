@@ -36,9 +36,11 @@ watermelon_org <- watermelon %>%
             count = n(),
             se_pollen = (sd_pollen/sqrt(count)))
 
+watermelon_org$farm_type <- paste(watermelon_org$management, watermelon_org$prox_habitat)
+
 # barplot by farm type 
 watermelon_org %>%
-ggplot(aes(x = management, prox_habitat, y = mean_pollen)) +
+ggplot(aes(x = farm_type, y = mean_pollen)) +
   geom_bar(stat = "identity") + theme_classic() +
   ggtitle("Total estimated pollen deposition by native bees") +  
        ylab("Pollen deposition per flower-day (pollen grains)") +  
