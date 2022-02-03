@@ -17,12 +17,33 @@ I chose this figure for this assignment because it illustrates the core findings
 
 The issue I take with these figures is that neither of them show the data itself. In part a, we simply see the sum of pollen grains deposited across all native pollinator species and the standard deviation. However, the graph gives us no hint as to how many data points were used to come up with this value. In part b of the figure, it is no different. To make matters worse, the axis labels have no units listed. For example, in part b one of the y axis is labeled "diversity" when it should be labeled "species richness" so as to refer to the number of species. Diversity is ambiguous and doesn't tell me what measure the researcher is using (e.g., shannons, species richness, Simpsons). In part a, they should have also had "pollen grains" listed as the unit. 
 
-I would have liked to create a stacked bar chart that shows the pollen deposition per flower-day by species however this information was not included in the data I managed to obtain from the author. My second solution was to create a box plot overlaid by a strip chart. 
+I would have liked to create a stacked bar chart that shows the average pollen deposition per flower-day by species however this information was not included in the data I obtained from the author. Instead, I created a bar graph that combined the pollen deposition from each native pollinator species (similar to the original figure). I also made the y-axis label more descriptive so it was easier for the reader to interpret. 
 
 ```{r}
+# Loading in necessary packages
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(ggplot2))
+
 # reading in the data 
 watermelon <- read.csv("watermelon.csv")
 
+# Grouping the different farm types
+# Calcuating standard error for error bars 
+watermelon_org <- watermelon %>%
+  group_by(management, prox_habitat) %>%
+  summarize(mean_pollen = mean(Pollen_deposition),
+            sd_pollen = sd(Pollen_deposition), 
+            count = n(),
+            se_pollen = (sd_pollen/sqrt(count)))
+
+# barplot by farm type 
+watermelon_org %>%
+ggplot(aes(x = management, prox_habitat, y = mean_pollen)) +
+  geom_bar(stat = "identity") + theme_classic() +
+  ggtitle("Total estimated pollen deposition by native bees") +  
+       ylab("Pollen deposition per flower-day (pollen grains)") +  
+       xlab("management type") + labs(fill = "proximity to natural habitat") +
+  geom_errorbar(aes(ymin = mean_pollen - se_pollen, ymax = mean_pollen +se_pollen), width = 0.2)
 
 ```
 
