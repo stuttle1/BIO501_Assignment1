@@ -7,17 +7,17 @@ output: html_document
 
 For assignment 1, I chose a figure from Kremen, Williams and Thorp (2002) "Crop pollination from native bees at risk from agricultural intensification". This study documented the contributions of individual pollinator species and aggregate communities to crop pollination on farms that varied by their proximity to natural habitat and their management type. Kremen *et al.* (2002) stress that agricultural intensification has pushed farmers to rely on managed honey bees (*Apis mellifera*) for crop pollination; however, relying entirely on managed honeybees may not be sustainable as *A. mellifera* numbers continue to decline from a combination of disease and insecticide poisoning. Kremen *et al.* (2002) propose that agricultural practices that support diverse wild pollinator communities could encourage wild pollinators to pollinate crops instead.  
 
-This study was set in the Central Valley and the eastern edge of the Coast Range of Yolo County, California and focused on watermelon. Watermelon was chosen because it requires multiple bee visits to produce marketable fruit. The farms were categorized as either conventional or organic and either near or far from natural habitat. At each site, researchers measured pollen deposition by presenting newly opened flowers to individual bees within the fields. Once the flower was visited, it was closed off using bridal veil and stigmas were excised the next day. Abundance and diversity were recorded through full-day flower visitor surveys. 
+This study was set in the Central Valley and the eastern edge of the Coast Range of Yolo County, California and focused on watermelon. Watermelon was chosen because it requires multiple bee visits to produce marketable fruit. The farms were categorized as either conventional or organic and either near or far from natural habitat. At each site, researchers measured pollen deposition by presenting newly opened flowers to individual bees within the fields. Once the flower was visited, it was closed off using bridal veil and stigmas were excised the next day. Abundance and diversity were recorded through full-day flower visitor surveys. The researchers estimated the pollen deposition rate by counting the number of flower visits by each species over the flower's lifetime (one day) and then multiplying this by the median per-visit pollen deposition for that species.  
 
-The first figure in this study illustrates the total estimated pollen deposited by native bees as well as the native bee diversity and abundance on the study sites. "ON" refers to organic farms near natural habitat, "OF" refers to organic farms far from natural habitat and "CF" refers to conventional farms far from natural habitat. 
+The first figure in this study illustrates the total estimated pollen deposited by native bees (part a) as well as the native bee diversity and abundance on the study sites (part b). "ON" refers to organic farms near natural habitat, "OF" refers to organic farms far from natural habitat and "CF" refers to conventional farms far from natural habitat. 
 
 ![](Claire_figure1.PNG)
 
 I chose this figure for this assignment because it illustrates the core findings of the paper, clearly showing that organic farms near natural habitat have the greatest native pollinator diversity and abundance, as well as the greatest number of pollen grains deposited by native bees. The conventional farms far from natural habitat, on the other hand, have the least diverse native pollinator community and the smallest contribution from wild pollinators.
 
-The issue I take with these figures is that neither of them show the data itself. In part a, we simply see the sum of pollen grains deposited across all native pollinator species and the standard deviation. However, the graph gives us no hint as to how many data points were used to come up with this value. In part b of the figure, it is no different. To make matters worse, the axis labels have no units listed. For example, in part b one of the y axis is labeled "diversity" when it should be labeled "species richness" so as to refer to the number of species. Diversity is ambiguous and doesn't tell me what measure the researcher is using (e.g., shannons, species richness, Simpsons). In part a, they should have also had "pollen grains" listed as the unit. 
+The issue I take with these figures is that neither of them show the data itself. In part a, we simply see the sum of the estimated pollen grains deposited across all native pollinator species and the standard error. However, the graph gives us no hint as to how many data points were used to come up with this value. In part b of the figure, we see the average species richness and abundance per farm type but again lack the individual data points. To make matters worse, none of the axis labels have units listed. For example, in part b one of the y axis is labeled "diversity" when it should be labeled "species richness" so as to refer to the number of species. Diversity is ambiguous and doesn't tell me what measure the researcher is using (e.g., shannons, species richness, Simpsons). In part a, they should also have "pollen grains" listed as the unit. 
 
-I would have liked to create a stacked bar chart that shows the average pollen deposition per flower-day by species however this information was not included in the data I obtained from the author. Instead, I created a bar graph that combined the pollen deposition from each native pollinator species (similar to the original figure). I also made the y-axis label more descriptive so it was easier for the reader to interpret. 
+I would have liked to create a stacked bar chart that shows the average pollen deposition per flower-day by species however this information was not included in the data I obtained from the author. Instead, I created a bar graph and overlaid it with the individual data points. This graph has less white space, actually shows the data and has a corrected y-axis title. 
 
 ```{r}
 # Loading in necessary packages
@@ -28,24 +28,59 @@ suppressPackageStartupMessages(library(ggplot2))
 watermelon <- read.csv("watermelon.csv")
 
 # Grouping the different farm types
-# Calcuating standard error for error bars 
 watermelon_org <- watermelon %>%
+  group_by(management, prox_habitat)
+
+# Calculating standard error for error bars 
+mean_pollen <- mean(watermelon$Pollen_deposition)
+sd_pollen <- sd(watermelon$Pollen_deposition)
+Count <- watermelon_org %>%
   group_by(management, prox_habitat) %>%
-  summarize(mean_pollen = mean(Pollen_deposition),
-            sd_pollen = sd(Pollen_deposition), 
-            count = n(),
-            se_pollen = (sd_pollen/sqrt(count)))
+  summarize(count = n())
+se_pollen <- (sd_pollen/sqrt(Count$count))
 
-watermelon_org$farm_type <- paste(watermelon_org$management, watermelon_org$prox_habitat)
+watermelon$farm_type <- paste(watermelon$management, watermelon$prox_habitat)
 
-# barplot by farm type 
-watermelon_org %>%
-ggplot(aes(x = farm_type, y = mean_pollen)) +
+# bar plot by farm type 
+p <- watermelon %>%
+ggplot(aes(x = farm_type, y = Pollen_deposition)) +
   geom_bar(stat = "identity") + theme_classic() +
+  geom_point() +
   ggtitle("Total estimated pollen deposition by native bees") +  
        ylab("Pollen deposition per flower-day (pollen grains)") +  
-       xlab("management type") + labs(fill = "proximity to natural habitat") +
-  geom_errorbar(aes(ymin = mean_pollen - se_pollen, ymax = mean_pollen +se_pollen), width = 0.2)
+       xlab("farm type") 
+print(p)
+
+#p + geom_errorbar(aes(ymin = mean_pollen - se_pollen, ymax = mean_pollen + se_pollen), width = 0.2) 
 
 ```
+
+When it came to enhancing the second graph included in this figure (part b), I decided a box plot overlaid with the individual data points would be a better approach. Unlike the figure in part a, the figure in part b is illustrating the average species richness and species abundance, not an estimated sum. While the reader can see the trend from this figure, it hides how few data points there are and is difficult to interpret without reading the description (when a legend would have been better). The box plot overlaid with the data points has less white space and is more transparent in how the researchers reached their conclusion. 
+
+Unfortunately, species abundance was not included in the data I obtained from the author but species richness was. I used the original data to create a box plot of the species diversity but had to simulate data for the species abundance. 
+
+```{r}
+# Simulate data for native bee abundance 
+# ON farm type 
+bee1 <- rep(c("native", "introduced"), c(80,20))
+random_sample1 <- sample(c("native", "introduced"), size = 20, replace = TRUE, prob = c(0.8,0.2))
+table(random_sample1)
+
+# OF farm type
+bee2 <- rep(c("native", "introduced"), c(30,70))
+random_sample2 <- sample(c("native", "introduced"), size = 20, replace = TRUE, prob = c(0.3,0.7))
+
+# CF
+bee3 <- rep(c("native", "introduced"), c(20,80))
+random_sample3 <- sample(c("native", "introduced"), size = 20, replace = TRUE, prob = c(0.2,0.8))
+
+# Graphing species richness and ###relative abundance!!! 
+watermelon %>% 
+ggplot(aes(x = farm_type, y = Richness)) +
+  geom_boxplot() + theme_classic() +
+  geom_jitter() +
+  ggtitle("Total number of native bee species per farm type") +  
+       ylab("Species richness") +  xlab("farm type") 
+```
+
 
