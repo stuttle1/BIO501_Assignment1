@@ -28,30 +28,16 @@ suppressPackageStartupMessages(library(ggplot2))
 watermelon <- read.csv("watermelon.csv")
 
 # Grouping the different farm types
-watermelon_org <- watermelon %>%
-  group_by(management, prox_habitat)
-
-# Calculating standard error for error bars 
-mean_pollen <- mean(watermelon$Pollen_deposition)
-sd_pollen <- sd(watermelon$Pollen_deposition)
-Count <- watermelon_org %>%
-  group_by(management, prox_habitat) %>%
-  summarize(count = n())
-se_pollen <- (sd_pollen/sqrt(Count$count))
-
 watermelon$farm_type <- paste(watermelon$management, watermelon$prox_habitat)
 
 # bar plot by farm type 
-p <- watermelon %>%
-ggplot(aes(x = farm_type, y = Pollen_deposition)) +
-  geom_bar(stat = "identity") + theme_classic() +
-  geom_point() +
+watermelon %>%
+ggplot(aes(x = reorder(farm_type, -Pollen_deposition), y = Pollen_deposition)) +
+  geom_violin() + geom_point() + geom_errorbar(stat = "summary") +
   ggtitle("Total estimated pollen deposition by native bees") +  
        ylab("Pollen deposition per flower-day (pollen grains)") +  
-       xlab("farm type") 
-print(p)
-
-#p + geom_errorbar(aes(ymin = mean_pollen - se_pollen, ymax = mean_pollen + se_pollen), width = 0.2) 
+       xlab("farm type") + theme_bw()
+ 
 
 ```
 
