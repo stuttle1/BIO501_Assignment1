@@ -80,7 +80,7 @@ ggplot(aes(x = reorder(farm_type, -Richness), y = Richness)) +
   ggtitle("Total number of native bee species per farm type") +  
        ylab("Species richness") +  xlab("farm type") + scale_y_continuous(name = "Species richness", sec.axis = sec_axis(trans =~.*10, name = "Species abundance (%)")) 
 
-p + geom_boxplot(aes(y = Abundance))
+#p + geom_boxplot(aes(y = Abundance))
 ```
 
 ### Still need to add second set of box plots and error bars. May need to adjust the y-axis.###
