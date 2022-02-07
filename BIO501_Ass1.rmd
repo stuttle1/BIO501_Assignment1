@@ -74,13 +74,13 @@ watermelon_org$Abundance <- c("35", "20", "20", "15", "15",
                               "90", "80", "90", "60", "75")
 
 # Graphing species richness and ###relative abundance!!! 
-p <- watermelon %>% 
+p <- watermelon_org %>% 
 ggplot(aes(x = reorder(farm_type, -Richness), y = Richness)) +
   geom_boxplot() + geom_jitter() + theme_bw() +
   ggtitle("Total number of native bee species per farm type") +  
        ylab("Species richness") +  xlab("farm type") + scale_y_continuous(name = "Species richness", sec.axis = sec_axis(trans =~.*10, name = "Species abundance (%)")) 
 
-#p + geom_boxplot(aes(y = Abundance))
+# p + geom_boxplot(watermelon_org, aes(x = reorder(farm_type, -Abundance), y = Abundance))
 ```
 
 ### Still need to add second set of box plots and error bars. May need to adjust the y-axis.###
