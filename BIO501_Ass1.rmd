@@ -23,6 +23,7 @@ I would have liked to create a stacked bar chart that shows the average pollen d
 # Loading in necessary packages
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(ggpubr))
 
 # Reading in the data 
 watermelon <- read.csv("watermelon.csv")
@@ -35,8 +36,8 @@ watermelon <- watermelon[order(watermelon$farm_type),]
 watermelon_org <- watermelon %>%
   select(farm_type, Pollen_deposition, Mean_visits, Richness)
 
-# Violin plot by farm type 
- watermelon %>%
+# Violin plot of Pollen deposition by farm type 
+ a <- watermelon %>%
   ggplot(aes(x = reorder(farm_type, -Pollen_deposition), y = Pollen_deposition)) + 
     geom_hline(yintercept = 1000, color = "slategray4") +
     geom_violin() + geom_point() + geom_errorbar(stat = "summary") + 
@@ -44,6 +45,7 @@ watermelon_org <- watermelon %>%
     ggtitle("Total estimated pollen deposition by native bees") +  
        ylab("Pollen deposition per flower-day (pollen grains)") +  
        xlab("farm type") + theme_bw() 
+ a
 
 ```
 
@@ -52,7 +54,19 @@ When it came to improving the second graph included in this figure (part b), I d
 Unfortunately, species abundance was not included in the data I obtained from the author but species richness was. I used the original data to create a box plot of the species diversity but had to simulate data for the species abundance. To simulate the species abundance data, I created three different populations (for each farm type) to sample from with relative abundances estimated from the original graph. I sampled from each population repeatedly until I had values for each site. I then manually entered these values into a new column in the existing csv file. 
 
 ```{r}
-# Simulate data for native bee abundance 
+
+# Graphing species richness
+b <- watermelon_org %>% 
+ggplot(aes(x = reorder(farm_type, -Richness), y = Richness)) +
+  geom_boxplot() + geom_jitter() +
+  ggtitle("Total number of native bee species per farm type") +  
+       ylab("Species richness") +  xlab("farm type") +  
+  stat_boxplot(aes(farm_type, Richness), 
+    geom ='errorbar', linetype=1, width=0.5) +  
+  stat_summary(fun = mean, geom ="point", size=2) + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") 
+
+# Simulating the data for native bee abundance 
 # CF farm type 
 bee1 <- rep(c("native", "introduced"), c(20,80))
 random_sample1 <- sample(c("native", "introduced"), size = 20, replace = TRUE, prob = c(0.2,0.8))
@@ -73,17 +87,24 @@ watermelon_org$Abundance <- c("35", "20", "20", "15", "15",
                               "30", "30", "35", "40",
                               "90", "80", "90", "60", "75")
 
-# Graphing species richness and ###relative abundance!!! 
-p <- watermelon_org %>% 
-ggplot(aes(x = reorder(farm_type, -Richness), y = Richness)) +
-  geom_boxplot() + geom_jitter() + theme_bw() +
-  ggtitle("Total number of native bee species per farm type") +  
-       ylab("Species richness") +  xlab("farm type") + scale_y_continuous(name = "Species richness", sec.axis = sec_axis(trans =~.*10, name = "Species abundance (%)")) 
+# Converting from character to factor to allow for graphing
+watermelon_org$Abundance <- as.factor(watermelon_org$Abundance)
 
-# p + geom_boxplot(watermelon_org, aes(x = reorder(farm_type, -Abundance), y = Abundance))
+# Graphing the relative abundance
+c <- watermelon_org %>% 
+ggplot(aes(x = reorder(farm_type, -Abundance), y = Abundance)) +
+  geom_boxplot() + 
+  ggtitle("Relative abundance of native bee species per farm type") +  
+       ylab("Species abundance") +  xlab("farm type") 
+c
+
+# Combining species richness and abundance plots ###
+ggarrange(b, c + rremove("x.text"),
+          labels = c("B", "C"),
+          ncol = 2)
+
 ```
 
-### Still need to add second set of box plots and error bars. May need to adjust the y-axis.###
 
 **Reference**
 
