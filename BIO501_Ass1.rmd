@@ -90,14 +90,16 @@ watermelon_org$Abundance <- c("35", "20", "20", "15", "15",
                               "90", "80", "90", "60", "75")
 
 # Converting from character to factor to allow for graphing
-watermelon_org$Abundance <- as.factor(watermelon_org$Abundance)
+watermelon_org$Abundance <- as.numeric(as.character(watermelon_org$Abundance))
 
 # Graphing the relative abundance ###
 c <- watermelon_org %>% 
-ggplot(aes(x = reorder(farm_type, -Abundance), y = Abundance)) +
+ggplot(aes(x = farm_type, y = Abundance)) +
   geom_boxplot() + 
   ggtitle("Native bee species abundance") +  
        ylab("Species abundance") +  xlab("farm type") 
+
+c
 
 ```
 
