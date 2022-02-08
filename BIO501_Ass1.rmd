@@ -27,6 +27,7 @@ suppressPackageStartupMessages(library(ggpubr))
 
 # Reading in the data 
 watermelon <- read.csv("watermelon.csv")
+head(watermelon)
 
 # Grouping the different farm types
 watermelon$farm_type <- paste(watermelon$management, watermelon$prox_habitat)
@@ -51,7 +52,7 @@ watermelon_org <- watermelon %>%
 
 When it came to improving the second graph included in this figure (part b), I decided a box plot overlaid with the individual data points would be a better approach. Unlike the figure in part a, the figure in part b is illustrating the average species richness and species abundance. While the reader can see the trend from this figure, it hides how few data points there are and is difficult to interpret without reading the description (when a legend would have been better). The box plot overlaid with the data points has less white space and is more transparent in how the researchers reached their conclusion. I could have created another violin plot as well but I wanted to practice creating a different kind of plot. 
 
-Unfortunately, species abundance was not included in the data I obtained from the author but species richness was. I used the original data to create a box plot of the species diversity but had to simulate data for the species abundance. To simulate the species abundance data, I created three different populations (for each farm type) to sample from with relative abundances estimated from the original graph. I sampled from each population repeatedly until I had values for each site. I then manually entered these values into a new column in the existing csv file. 
+Unfortunately, while species richness was included in the data obtained from the author, species abundance was not. I used the original data to create a box plot of the species diversity but had to simulate data for the species abundance. To simulate the species abundance data, I created three different populations (for each farm type) to sample from with mean relative abundances estimated from the original graph. I sampled from each population repeatedly until I had values for each site. I then manually entered these values into a new column in the existing csv file. 
 
 ```{r}
 
