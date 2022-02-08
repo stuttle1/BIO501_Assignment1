@@ -60,12 +60,13 @@ Unfortunately, while species richness was included in the data obtained from the
 b <- watermelon_org %>% 
 ggplot(aes(x = reorder(farm_type, -Richness), y = Richness)) +
   geom_boxplot() + geom_jitter() +
-  ggtitle("Total number of native bee species per farm type") +  
+  ggtitle("Native bee species richness") +  
        ylab("Species richness") +  xlab("farm type") +  
   stat_boxplot(aes(farm_type, Richness), 
     geom ='errorbar', linetype=1, width=0.5) +  
   stat_summary(fun = mean, geom ="point", size=2) + 
   stat_summary(fun.data = mean_se, geom = "errorbar") 
+
 
 # Simulating the data for native bee abundance 
 # CF farm type 
@@ -91,21 +92,23 @@ watermelon_org$Abundance <- c("35", "20", "20", "15", "15",
 # Converting from character to factor to allow for graphing
 watermelon_org$Abundance <- as.factor(watermelon_org$Abundance)
 
-# Graphing the relative abundance
+# Graphing the relative abundance ###
 c <- watermelon_org %>% 
 ggplot(aes(x = reorder(farm_type, -Abundance), y = Abundance)) +
   geom_boxplot() + 
-  ggtitle("Relative abundance of native bee species per farm type") +  
+  ggtitle("Native bee species abundance") +  
        ylab("Species abundance") +  xlab("farm type") 
-c
-
-# Combining species richness and abundance plots ###
-ggarrange(b, c + rremove("x.text"),
-          labels = c("B", "C"),
-          ncol = 2)
 
 ```
 
+Combining my work on the second graph (part b), which I've split into two new graphs ("B" and "C"), the new set of graphs look like so:
+
+```{r}
+# Combining species richness and abundance plots ###
+ggarrange(b, c + rremove("x.text"),
+          labels = c("B", "C"),
+          ncol = 2, nrow = 1)
+```
 
 **Reference**
 
