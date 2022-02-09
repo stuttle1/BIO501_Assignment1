@@ -99,7 +99,7 @@ ggplot(aes(x = reorder(farm_type, -Abundance), y = Abundance)) +
 
 ```
 
-Combining my work on the second graph (part b), which I've split into two new graphs ("B" and "C"), the new set of graphs look like so. 
+Combining my work on the second graph (part b), which I've split into two new graphs ("B" and "C"), the new set of graphs look like so. Note how the difference in species abundance between "OF" and "CF" farm types is so small that when I randomly simulated the data, using estimates from the graph, the farm type on the x-axis changed relative to the original!
 
 ```{r}
 # Combining species richness and abundance plots
