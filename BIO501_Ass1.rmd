@@ -2,7 +2,8 @@
 title: "BIO501 Assignment 1"
 author: "Sasha Tuttle"
 date: "1/31/2022"
-output: html_document
+output:
+  pdf_document: default
 ---
 
 For assignment 1, I chose a figure from Kremen, Williams and Thorp (2002) "Crop pollination from native bees at risk from agricultural intensification". This study documented the contributions of individual pollinator species and aggregate communities to crop pollination on farms that varied by their proximity to natural habitat and their management type. Kremen *et al.* (2002) stress that agricultural intensification has pushed farmers to rely on managed honey bees (*Apis mellifera*) for crop pollination; however, relying entirely on managed honeybees may not be sustainable as *A. mellifera* numbers continue to decline from a combination of disease and insecticide poisoning. Kremen *et al.* (2002) propose that agricultural practices that support diverse wild pollinator communities could encourage wild pollinators to pollinate crops instead.  
@@ -77,7 +78,7 @@ table(random_sample2)
 # ON farm type 
 bee3 <- rep(c("native", "introduced"), c(80,20))
 random_sample3 <- sample(c("native", "introduced"), size = 20, replace = TRUE, prob = c(0.8,0.2))
-tab()le(random_sample3)
+table(random_sample3)
 
 # Adding the simulated data to the existing .csv file
 watermelon_org$Abundance <- c("35", "20", "20", "15", "15",
@@ -87,7 +88,7 @@ watermelon_org$Abundance <- c("35", "20", "20", "15", "15",
 # Converting from character to numeric to permit graphing
 watermelon_org$Abundance <- as.numeric(as.character(watermelon_org$Abundance))
 
-# Graphing the relative abundance ###
+# Graphing the relative abundance 
 c <- watermelon_org %>% 
 ggplot(aes(x = reorder(farm_type, -Abundance), y = Abundance)) +
   stat_summary(fun.data = mean_se, geom = "errorbar") +
