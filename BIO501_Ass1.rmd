@@ -13,13 +13,13 @@ The first figure in this study illustrates the total estimated pollen deposited 
 
 ![](Claire_figure1.PNG)
 
-I chose this figure for this assignment because it illustrates the core findings of the paper, clearly showing that organic farms near natural habitat have the greatest native pollinator diversity and abundance, as well as the greatest number of pollen grains deposited by native bees. The conventional farms far from natural habitat, on the other hand, have the least diverse native pollinator community and the smallest contribution from wild pollinators.
+I chose this figure for this assignment because it illustrates the core findings of the paper, showing that organic farms near natural habitat have the greatest native pollinator diversity and abundance, as well as the greatest number of pollen grains deposited by native bees. The conventional farms far from natural habitat, on the other hand, have the least diverse native pollinator community and the smallest contribution from wild pollinators.
 
-The issue I take with these figures is that neither of them show the data itself. In part a, we simply see the sum of the estimated pollen grains deposited across all native pollinator species and the standard error. However, the graph gives us no hint as to how many data points were used to come up with this value. In part b of the figure, we see the average species richness and abundance per farm type but again lack the individual data points. To make matters worse, none of the axis labels have units listed. For example, in part b one of the y axis is labeled "diversity" when it should be labeled "species richness" so as to refer to the number of species. Diversity is ambiguous and doesn't tell me what measure the researcher is using (e.g., shannons, species richness, Simpsons). In part a, they should also have "pollen grains" listed as the unit. 
+The issue I take with these figures is that neither of them show the data itself. In part a, we simply see the estimated pollen deposition across all native pollinator species and the standard error. However, the graph gives us no hint as to how many data points were used to come up with this value. In part b of the figure, we see the average species richness and abundance per farm type but again lack the individual data points. The figure in part b also has a dual y axis with different scales, making it confusing to read. To make matters worse, none of the axis labels have units listed. For example, in part b one of the y axis is labeled "diversity" when it should be labeled "species richness" so as to refer to the number of species. Diversity is ambiguous and doesn't tell me what measure the researcher is using (e.g., shannons, species richness, Simpsons). In part a, they should also have "pollen grains" listed as the unit. 
 
-I would have liked to create a stacked bar chart that shows the average pollen deposition per flower-day by species however this information was not included in the data I obtained from the author. Instead, I created a violin graph and overlaid it with the individual data points. This graph has less white space, actually shows the data and has a corrected y-axis title. 
+To enhance the figure in part a, I would have liked to create a stacked bar chart that shows the average pollen deposition per flower-day by species however this information was not included in the data I obtained from the author. Instead, I created a violin graph and overlaid it with the individual data points. This graph has less white space, actually shows the data and has a corrected y-axis title. I also made the median a red dot to make it stand out. 
 
-```{r warning = FALSE}
+```{r warning = FALSE, message = FALSE}
 # Loading in necessary packages
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(ggplot2))
@@ -32,8 +32,7 @@ head(watermelon)
 # Grouping the different farm types
 watermelon$farm_type <- paste(watermelon$management, watermelon$prox_habitat)
 
-# Re-organizing the data frame
-watermelon <- watermelon[order(watermelon$farm_type),]
+# Filtering the data frame
 watermelon_org <- watermelon %>%
   select(farm_type, Pollen_deposition, Mean_visits, Richness)
 
@@ -50,23 +49,19 @@ watermelon_org <- watermelon %>%
 
 ```
 
-When it came to improving the second graph included in this figure (part b), I decided a box plot overlaid with the individual data points would be a better approach. Unlike the figure in part a, the figure in part b is illustrating the average species richness and species abundance. While the reader can see the trend from this figure, it hides how few data points there are and is difficult to interpret without reading the description (when a legend would have been better). The box plot overlaid with the data points has less white space and is more transparent in how the researchers reached their conclusion. I could have created another violin plot as well but I wanted to practice creating a different kind of plot. 
+When it came to improving the second graph included in this figure (part b), I decided a strip chart with the individual data points would be a better approach. Unlike the figure in part a, the figure in part b is illustrating the average species richness and species abundance. While the reader can see the trend from this figure, it hides how few data points there are and is difficult to interpret without reading the description. The strip chart with individual data points is more transparent in how the researchers reached their conclusion. I could have created another violin plot as well but I wanted to practice creating a different kind of plot. 
 
-Unfortunately, while species richness was included in the data obtained from the author, species abundance was not. I used the original data to create a box plot of the species diversity but had to simulate data for the species abundance. To simulate the species abundance data, I created three different populations (for each farm type) to sample from with mean relative abundances estimated from the original graph. I sampled from each population repeatedly until I had values for each site. I then manually entered these values into a new column in the existing csv file. 
+Unfortunately, while species richness was included in the data obtained from the author, species abundance was not. I used the original data to create a strip chart of the species diversity but had to simulate data for the species abundance. To simulate the species abundance data, I created three different populations (for each farm type) to sample from with mean relative abundances estimated from the original graph. I sampled from each population repeatedly until I had values for each site. I then manually entered these values into a new column in the existing csv file. While the error bars in the first figure (part a) and the second figure (part b - species richness) are similar to the ones seen in the original, the error bars for the figure of species abundance are not as similar to the original. I suspect this to be a result of the simulated data not having the same standard error as the original data used. 
 
 ```{r}
-
 # Graphing species richness
 b <- watermelon_org %>% 
 ggplot(aes(x = reorder(farm_type, -Richness), y = Richness)) +
-  geom_boxplot() + geom_jitter() +
+  geom_point() + theme_bw() +
   ggtitle("Native bee species richness") +  
-       ylab("Species richness") +  xlab("farm type") +  
-  stat_boxplot(aes(farm_type, Richness), 
-    geom ='errorbar', linetype=1, width=0.5) +  
-  stat_summary(fun = mean, geom ="point", size=2) + 
+  ylab("Species richness") +  xlab("farm type") + 
+  ylim(2, 12) +
   stat_summary(fun.data = mean_se, geom = "errorbar") 
-
 
 # Simulating the data for native bee abundance 
 # CF farm type 
@@ -82,32 +77,32 @@ table(random_sample2)
 # ON farm type 
 bee3 <- rep(c("native", "introduced"), c(80,20))
 random_sample3 <- sample(c("native", "introduced"), size = 20, replace = TRUE, prob = c(0.8,0.2))
-table(random_sample3)
+tab()le(random_sample3)
 
 # Adding the simulated data to the existing .csv file
 watermelon_org$Abundance <- c("35", "20", "20", "15", "15",
                               "30", "30", "35", "40",
                               "90", "80", "90", "60", "75")
 
-# Converting from character to factor to allow for graphing
+# Converting from character to numeric to permit graphing
 watermelon_org$Abundance <- as.numeric(as.character(watermelon_org$Abundance))
 
 # Graphing the relative abundance ###
 c <- watermelon_org %>% 
-ggplot(aes(x = farm_type, y = Abundance)) +
-  geom_boxplot() + 
+ggplot(aes(x = reorder(farm_type, -Abundance), y = Abundance)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar") +
+  geom_point() + theme_bw() +
   ggtitle("Native bee species abundance") +  
-       ylab("Species abundance") +  xlab("farm type") 
-
-c
+  ylab("Species abundance (%)") +  xlab("farm type") + 
+  ylim(0, 100) 
 
 ```
 
-Combining my work on the second graph (part b), which I've split into two new graphs ("B" and "C"), the new set of graphs look like so:
+Combining my work on the second graph (part b), which I've split into two new graphs ("B" and "C"), the new set of graphs look like so. 
 
 ```{r}
-# Combining species richness and abundance plots ###
-ggarrange(b, c + rremove("x.text"),
+# Combining species richness and abundance plots
+ggarrange(b, c,
           labels = c("B", "C"),
           ncol = 2, nrow = 1)
 ```
